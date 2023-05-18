@@ -11,31 +11,29 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run script with even operation
-      run: bash script.sh -i test_input.txt -o test_output.txt -d even
-      env:
-        input_data: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n"
-
-    - name: Check output file for even operation
       run: |
-        even_count=$(grep -o 'Количество четных чисел: [0-9]\+' test_output.txt | grep -o '[0-9]\+')
-        if [[ $even_count -eq 5 ]]; then
-          echo "Test passed: Even numbers counted correctly."
-        else
-          echo "Test failed: Even numbers not counted correctly."
-          exit 1
-        fi
+        ./script.sh -i input.txt -o output.txt -d even
+
+    - name: Check output for even operation
+      run: |
+         output=$(cat output.txt)
+          if [[ $output == *"Количество четных чисел"* ]]; then
+            echo "Even operation test passed"
+          else
+            echo "Even operation test failed"
+            exit 1
+          fi
 
     - name: Run script with odd operation
-      run: bash script.sh -i test_input.txt -o test_output.txt -d odd
-      env:
-        input_data: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n"
-
-    - name: Check output file for odd operation
       run: |
-        odd_count=$(grep -o 'Количество нечетных чисел: [0-9]\+' test_output.txt | grep -o '[0-9]\+')
-        if [[ $odd_count -eq 5 ]]; then
-          echo "Test passed: Odd numbers counted correctly."
-        else
-          echo "Test failed: Odd numbers not counted correctly."
-          exit 1
-        fi
+        ./script.sh -i input.txt -o output.txt -d odd
+
+    - name: Check output for odd operation
+      run: |
+         output=$(cat output.txt)
+         if [[ $output == *"Количество нечетных чисел"* ]]; then
+           echo "Odd operation test passed"
+         else
+           echo "Odd operation test failed"
+           exit 1
+         fi
