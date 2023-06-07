@@ -1,0 +1,11 @@
+#!/bin/bash
+
+in="list"
+out="opt-list"
+nm="opt"
+chmod +x $nm
+echo -e "y\n" | ./$nm $in $out > log
+
+if [[ ! -f $out && ! $(cat log | grep -q "Файл opt-list существует, перезаписать ли его? [Y/n]") ]]; then
+    exit 1
+fi
