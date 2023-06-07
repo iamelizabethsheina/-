@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ ! -f $1 ]]; then
+    echo "Нет списка покупок"
+fi
+
+if [[ -z $2 ]]; then
+    echo "Нет названия для оптимизированного списка покупок"
+fi
+
+if [[ -f $2 ]]; then
+    read -p "Файл $2 существует, перезаписать ли его? [Y/n] " yn
+    if [[ yn != "n" ]]; then
+        rm -f $2 #удаляет файл без вопроса пользователя 
+        touch $2 #создает пустой файл с названием от пользователя     
+        exit 1
+    fi
+else
+    touch $2
+fi
+
+while read line; do
+    prod=$(echo $line | awk -F ': ' '{print $1}')
+    sum=0
+    if cat $2 | grep -q $prod; then
+        continue
+    fi
+    while read sline; do
+        sum=$((sum + $(echo $sline | awk -F ': ' '{printf "%d", $2}')))
+    done < <(cat $1 | grep $prod)
+    echo "$prod: $sum" >> "$2"
+done <$1
