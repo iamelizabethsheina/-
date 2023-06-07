@@ -1,0 +1,11 @@
+#!/bin/bash
+
+in="list"
+out="opt-list"
+nm="opt"
+chmod +x $nm
+./$nm $in $out
+
+if [[ ! -f $out ]]; then
+    exit 1
+fi
